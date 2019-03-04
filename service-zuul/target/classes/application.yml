@@ -1,0 +1,41 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8769
+spring:
+  application:
+    name: service-zuul
+#  main:
+#    allow-bean-definition-overriding: true
+zuul:
+  routes:
+    api-a:
+      path: /api-a/**
+      serviceId: service-ribbon
+    api-b:
+      path: /api-b/**
+      serviceId: service-fegin
+  max:
+      host:
+        connections: 2500
+  host:
+    connect-timeout-millis: 210000
+    socket-timeout-millis: 260000
+#zuul部署上物理机之后，如果使用默认配置，请求很容易超时
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 260000
+ribbon:
+  ReadTimeout: 260000
+  ConnectTimeout: 260000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 1
+  eureka:
+    enabled: true
+
